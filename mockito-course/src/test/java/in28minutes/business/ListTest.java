@@ -13,9 +13,13 @@ public class ListTest {
 
 	@Test
 	public void letsMockListSizeMethod() {
-		
+		// Given - setup
 		List mockList= mock(List.class);
+		
+		// When - actual method calls
 		when(mockList.size()).thenReturn(2);
+		
+		//Then - asserts
 		assertEquals(2,mockList.size());
 		
 	}
