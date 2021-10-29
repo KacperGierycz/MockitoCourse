@@ -97,15 +97,12 @@ public class TodoBuisenesImplMockTest {
 		
 		//Define Argument captor on specific method call
 		//Capture the argument
-		
-		
-		
-		
+				
 		//Given
 		
 		TodoService toDoServiceMock = mock(TodoService.class);
 		
-		List<String> todos =Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
+		List<String> todos =Arrays.asList("Learn to Rock and Roll" , "Learn Spring MVC", "Learn Spring", "Learn to Dance");
 		
 		given(toDoServiceMock.retrieveTodos("Dummy")).willReturn(todos);
 		
@@ -117,10 +114,10 @@ public class TodoBuisenesImplMockTest {
 
 		//Then
 
-		 then(toDoServiceMock).should().deleteTodo(stringArgumentCaptor.capture());
+		 then(toDoServiceMock).should(times(2)).deleteTodo(stringArgumentCaptor.capture());
 
-		 assertThat(stringArgumentCaptor.getValue(),is("Learn to Dance"));
-		 
+	//	 assertThat(stringArgumentCaptor.getValue(),is("Learn to Dance"));
+		 assertThat(stringArgumentCaptor.getAllValues().size(),is(2));
 	}
 	
 }
