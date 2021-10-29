@@ -3,6 +3,7 @@ package in28minutes.business;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import in28minutes.api.TodoService;
 import in28minutes.data.spi.TodoServiceStub;
@@ -80,7 +82,45 @@ public class TodoBuisenesImplMockTest {
 
 		//Then
 		 verify(toDoServiceMock, times(1)).deleteTodo("Learn to Dance");
+		 then(toDoServiceMock).should().deleteTodo("Learn to Dance");
+		
 		 verify(toDoServiceMock,never()).deleteTodo("Learn Spring MVC");
+		 then(toDoServiceMock).should(never()).deleteTodo("Learn Spring MVC");
+		 
 	}
 
+	@Test
+	public void testRetrieveTodosNotRelatedToSpring_usingBDD_argumentCapture() {
+		
+		//Declare Argument Captor
+		ArgumentCaptor<String> stringArgumentCaptor= ArgumentCaptor.forClass(String.class);
+		
+		//Define Argument captor on specific method call
+		//Capture the argument
+		
+		
+		
+		
+		//Given
+		
+		TodoService toDoServiceMock = mock(TodoService.class);
+		
+		List<String> todos =Arrays.asList("Learn Spring MVC", "Learn Spring", "Learn to Dance");
+		
+		given(toDoServiceMock.retrieveTodos("Dummy")).willReturn(todos);
+		
+		TodoBusinessImpl todoBusinessImpl = new TodoBusinessImpl(toDoServiceMock);
+		
+		//When
+		 todoBusinessImpl.deleteTodoNotRelatedToToSpting("Dummy");
+		//System.out.println(filteredTodos.size());
+
+		//Then
+
+		 then(toDoServiceMock).should().deleteTodo(stringArgumentCaptor.capture());
+
+		 assertThat(stringArgumentCaptor.getValue(),is("Learn to Dance"));
+		 
+	}
+	
 }
