@@ -23,6 +23,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.in28minutes.powermock.SystemUnderTest;
 import com.in28minutes.powermock.UtilityClass;
@@ -33,15 +36,14 @@ import in28minutes.data.spi.TodoServiceStub;
 
 // no need to run with with a rule
 //@RunWith(MockitoJUnitRunner.class)
-@RunWith(PowerMockRunner)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(UtilityClass.class)
 public class MockingStaticMethodTest {
 	
-	// What is mocking?
-	// mocking is creating objects that simulates the behavior of real objects
-	// Unlike stubs, mocks can be dynamically created from code - at runtime
-	// Mocks offer more functionality then stubbing.
-	// You can verify method calls and lot of other things.
-	
+	//Specific Runner PowerMockRunner.class
+	//Initialize UtilityClass.class
+	//mock
+
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	
@@ -62,11 +64,18 @@ public class MockingStaticMethodTest {
 		List<Integer> stats=Arrays.asList(1,2,3);
 		
 		when(dependency.retrieveAllStats()).thenReturn(stats);
+		
+		PowerMockito.mockStatic(UtilityClass.class);
+		
 		when(UtilityClass.staticMethod(6)).thenReturn(150);
 		
 		
-		systemUnderTest.methodCallingAStaticMethod();
+		int result = systemUnderTest.methodCallingAStaticMethod();
 		
+		assertEquals(150, result);
+		
+		PowerMockito.verifyStatic();
+		UtilityClass.staticMethod(6);
 		
 	}
 	
