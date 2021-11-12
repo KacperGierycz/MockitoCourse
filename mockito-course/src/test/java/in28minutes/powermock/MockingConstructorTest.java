@@ -38,41 +38,38 @@ import in28minutes.data.spi.TodoServiceStub;
 
 //no need to run with with a rule
 //@RunWith(MockitoJUnitRunner.class)
- 
 @RunWith(PowerMockRunner.class)
-public class InvokingPrivateMethodTest {
-	
+@PrepareForTest(SystemUnderTest.class)
+public class MockingConstructorTest {
 
-
-	@Rule
-	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	
-	@Mock
-	Dependency dependency;
+	
+	//PrepareForTest => SystemUnderTest.class ArrayList.class
+	//override the constructor
 	
 	@InjectMocks
 	SystemUnderTest systemUnderTest;
 	
-	@Captor
-	ArgumentCaptor<String> stringArgumentCaptor;
+	@Mock
+	ArrayList mockList;
 
 	
 	@Test
-	public void testRetrieveTodosRelatedToSpring_usingAMock() throws Exception {
+	public void testBedNames() throws Exception {
 		
 		
 		List<Integer> stats=Arrays.asList(1,2,3);
 		
-		when(dependency.retrieveAllStats()).thenReturn(stats);
+		when(mockList.size()).thenReturn(5);
 		
+		PowerMockito.whenNew(ArrayList.class).withAnyArguments().thenReturn(mockList);
 		
-
+		int size= systemUnderTest.methodUsingAnArrayListConstructor();
 		
-		
-		long result =Whitebox.invokeMethod(systemUnderTest, "privateMethodUnderTest");
-		
-		assertEquals(6, result);
+		assertEquals(5, size);
 
 		
 	}
+	
+	
 }
